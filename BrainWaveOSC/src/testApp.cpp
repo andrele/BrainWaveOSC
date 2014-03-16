@@ -404,6 +404,34 @@ void testApp::update(){
              eegHighBetaText->sendOSC(eegHighBeta.value);
              eegLowGammaText->sendOSC(eegLowGamma.value);
              eegMidGammaText->sendOSC(eegMidGamma.value);*/
+            
+            ofxOscMessage *wNames = new ofxOscMessage();
+            ofxOscMessage *wMessage = new ofxOscMessage();
+            
+            wNames->setAddress("/oscCustomFeaturesNames");
+            wNames->addStringArg("Delta");
+            wNames->addStringArg("Theta");
+            wNames->addStringArg("LowAlpha");
+            wNames->addStringArg("HighAlpha");
+            wNames->addStringArg("LowBeta");
+            wNames->addStringArg("HighBeta");
+            wNames->addStringArg("LowGamma");
+            wNames->addStringArg("MidGamma");
+            
+            wMessage->setAddress("/oscCustomFeatures");
+            wMessage->addFloatArg(allData.eegDelta);
+            wMessage->addFloatArg(allData.eegTheta);
+            wMessage->addFloatArg(allData.eegLowAlpha);
+            wMessage->addFloatArg(allData.eegHighAlpha);
+            wMessage->addFloatArg(allData.eegLowBeta);
+            wMessage->addFloatArg(allData.eegHighBeta);
+            wMessage->addFloatArg(allData.eegLowGamma);
+            wMessage->addFloatArg(allData.eegMidGamma);
+            
+            wekinator.sendMessage(*wNames);
+            wekinator.sendMessage(*wMessage);
+            
+            
         }
 
     } else {
@@ -438,6 +466,33 @@ void testApp::update(){
                 eegHighBetaGraph->sendOSC(dataEntries[playhead].eegHighBeta);
                 eegLowGammaGraph->sendOSC(dataEntries[playhead].eegLowGamma);
                 eegMidGammaGraph->sendOSC(dataEntries[playhead].eegMidGamma);
+                
+                
+                ofxOscMessage *wNames = new ofxOscMessage();
+                ofxOscMessage *wMessage = new ofxOscMessage();
+                
+                wNames->setAddress("/oscCustomFeaturesNames");
+                wNames->addStringArg("Delta");
+                wNames->addStringArg("Theta");
+                wNames->addStringArg("LowAlpha");
+                wNames->addStringArg("HighAlpha");
+                wNames->addStringArg("LowBeta");
+                wNames->addStringArg("HighBeta");
+                wNames->addStringArg("LowGamma");
+                wNames->addStringArg("MidGamma");
+                
+                wMessage->setAddress("/oscCustomFeatures");
+                wMessage->addFloatArg(dataEntries[playhead].eegDelta);
+                wMessage->addFloatArg(dataEntries[playhead].eegTheta);
+                wMessage->addFloatArg(dataEntries[playhead].eegLowAlpha);
+                wMessage->addFloatArg(dataEntries[playhead].eegHighAlpha);
+                wMessage->addFloatArg(dataEntries[playhead].eegLowBeta);
+                wMessage->addFloatArg(dataEntries[playhead].eegHighBeta);
+                wMessage->addFloatArg(dataEntries[playhead].eegLowGamma);
+                wMessage->addFloatArg(dataEntries[playhead].eegMidGamma);
+                
+                wekinator.sendMessage(*wNames);
+                wekinator.sendMessage(*wMessage);
             }
             
             //poorsignal.set(dataEntries[playhead].signal, timeElapsed);
@@ -670,8 +725,7 @@ void testApp::onThinkgearMeditation(ofxThinkgearEventArgs& args){
 }
 
 void testApp::onThinkgearEeg(ofxThinkgearEventArgs& args){
-    ofxOscMessage *wNames = new ofxOscMessage();
-    ofxOscMessage *wMessage = new ofxOscMessage();
+
     
     // about the 8 eeg bands (Comparison table of EEG rhythmic activity frequency bands): http://en.wikipedia.org/wiki/Electroencephalography
     allData.eegDelta = args.eegDelta;
@@ -683,28 +737,7 @@ void testApp::onThinkgearEeg(ofxThinkgearEventArgs& args){
     allData.eegLowGamma = args.eegLowGamma;
     allData.eegMidGamma = args.eegMidGamma;
     
-    wNames->setAddress("/oscCustomFeaturesNames");
-    wNames->addStringArg("Delta");
-    wNames->addStringArg("Theta");
-    wNames->addStringArg("LowAlpha");
-    wNames->addStringArg("HighAlpha");
-    wNames->addStringArg("LowBeta");
-    wNames->addStringArg("HighBeta");
-    wNames->addStringArg("LowGamma");
-    wNames->addStringArg("MidGamma");
-    
-    wMessage->setAddress("/oscCustomFeatures");
-    wMessage->addFloatArg(args.eegDelta);
-    wMessage->addFloatArg(args.eegTheta);
-    wMessage->addFloatArg(args.eegLowAlpha);
-    wMessage->addFloatArg(args.eegHighAlpha);
-    wMessage->addFloatArg(args.eegLowBeta);
-    wMessage->addFloatArg(args.eegHighBeta);
-    wMessage->addFloatArg(args.eegLowGamma);
-    wMessage->addFloatArg(args.eegMidGamma);
-    
-    wekinator.sendMessage(*wNames);
-    wekinator.sendMessage(*wMessage);
+
     
 }
 
