@@ -68,7 +68,7 @@ void testApp::setup(){
     
     
     // default device settings
-    deviceName = "/dev/tty.BrainBand-DevB";
+    deviceName = "/dev/tty.MindWaveMobile-DevA";
     deviceBaudRate = 57600;
     
     // osc settings
@@ -79,6 +79,8 @@ void testApp::setup(){
     
     tg.setup(deviceName, deviceBaudRate);
     tg.addEventListener(this);
+    
+    wekinator.setup("127.0.0.1", 6448);
     
 }
 
@@ -668,7 +670,9 @@ void testApp::onThinkgearMeditation(ofxThinkgearEventArgs& args){
 }
 
 void testApp::onThinkgearEeg(ofxThinkgearEventArgs& args){
-
+    ofxOscMessage *wNames = new ofxOscMessage();
+    ofxOscMessage *wMessage = new ofxOscMessage();
+    
     // about the 8 eeg bands (Comparison table of EEG rhythmic activity frequency bands): http://en.wikipedia.org/wiki/Electroencephalography
     allData.eegDelta = args.eegDelta;
     allData.eegTheta = args.eegTheta;
@@ -678,6 +682,30 @@ void testApp::onThinkgearEeg(ofxThinkgearEventArgs& args){
     allData.eegHighBeta = args.eegHighBeta;
     allData.eegLowGamma = args.eegLowGamma;
     allData.eegMidGamma = args.eegMidGamma;
+    
+    wNames->setAddress("/oscCustomFeaturesNames");
+    wNames->addStringArg("Delta");
+    wNames->addStringArg("Theta");
+    wNames->addStringArg("LowAlpha");
+    wNames->addStringArg("HighAlpha");
+    wNames->addStringArg("LowBeta");
+    wNames->addStringArg("HighBeta");
+    wNames->addStringArg("LowGamma");
+    wNames->addStringArg("MidGamma");
+    
+    wMessage->setAddress("/oscCustomFeatures");
+    wMessage->addFloatArg(args.eegDelta);
+    wMessage->addFloatArg(args.eegTheta);
+    wMessage->addFloatArg(args.eegLowAlpha);
+    wMessage->addFloatArg(args.eegHighAlpha);
+    wMessage->addFloatArg(args.eegLowBeta);
+    wMessage->addFloatArg(args.eegHighBeta);
+    wMessage->addFloatArg(args.eegLowGamma);
+    wMessage->addFloatArg(args.eegMidGamma);
+    
+    wekinator.sendMessage(*wNames);
+    wekinator.sendMessage(*wMessage);
+    
 }
 
 void testApp::onThinkgearConnecting(ofxThinkgearEventArgs& args){

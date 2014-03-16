@@ -93,4 +93,6 @@ public:
     bool playbackMode;
     int playhead;
     vector<EegData> dataEntries;
+    
+    ofxOscSender wekinator;
 };
